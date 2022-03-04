@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '../store'
 
 const http = axios.create({
-  baseURL: 'http://127.0.0.1:8000',
+  baseURL: 'http://127.0.0.1:8000/',
   timeout: 100000,
   headers: { "Content-Type": "application/json" },
 })
@@ -13,7 +13,7 @@ http.interceptors.request.use(config => {
   }
   return config
 }, error => {
-  // Do something with request error
+  // Do something with request error`
   console.log('Error in config interceptors: ') // for debug
   console.log(error) // for debug
   Promise.reject(error)

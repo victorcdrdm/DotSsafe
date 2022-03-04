@@ -7,7 +7,17 @@ use App\Repository\ContributionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      itemOperations={
+ *          "put",
+ *          "get",
+ *          "get_data_contribution"={
+ *              "method"="GET",
+ *              "path"="/contributions/{id}/data",
+ *              "controller"="App\Controller\ContributionData",
+ *          }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ContributionRepository::class)
  */
 class Contribution

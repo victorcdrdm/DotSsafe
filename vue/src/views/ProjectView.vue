@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     getDataProject(id) {
-      console.log(this.id)
       serverFile.getDataProject(id).then((response) => {
         this.technologies = response['hydra:member'][0].technologies
         this.contributions = response['hydra:member'][0].contributions
@@ -105,7 +104,6 @@ export default {
         }
       }).catch((err) => {
         if (err) {
-          console.log(err)
           this.error = "Une erreur est survenu veuillez vérifier les informations renseignées."
         }
       })

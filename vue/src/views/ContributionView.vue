@@ -85,6 +85,7 @@ export default {
       })
     },
     newContribution() {
+      this.contributions = []
       let data = []
       let technology = settings.PATH_TECHNOLOGIES + this.selectedTechnology
       let params = {

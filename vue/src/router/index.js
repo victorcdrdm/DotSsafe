@@ -2,8 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/HomeView.vue'
 import Technologies from '../views/TechnologiesView.vue'
-import Member from '../views/MembersView.vue'
+import Members from '../views/MembersView.vue'
 import Contributions from '../views/ContributionView'
+import Project from '../views/ProjectView'
+import Technology from '../views/TechnologyView'
+import Member from '../views/MemberView'
 
 Vue.use(VueRouter)
 
@@ -21,12 +24,27 @@ const routes = [
   {
     path: '/membres',
     name: 'Membres',
-    component: Member
+    component: Members
   },
   {
     path: '/contributions',
     name: 'Contributions',
     component: Contributions
+  },
+  {
+    path: '/projet/:name',
+    name: 'Project',
+    component: Project
+  },
+  {
+    path: '/technologie/:name',
+    name: 'Technology',
+    component: Technology,
+  },
+  {
+    path: '/membre/:name',
+    name: 'Member',
+    component: Member 
   }
 
 ]

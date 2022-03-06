@@ -11,7 +11,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ApiResource()
+ * @ApiResource(itemOperations={
+ *          "put",
+ *          "get",
+ *          "get_data_member"={
+ *              "method"="GET",
+ *              "path"="/member/{id}/data",
+ *              "controller"="App\Controller\MemberData",
+ *          }
+ *      })
  * @ORM\Entity(repositoryClass=MemberRepository::class)
  */
 class Member

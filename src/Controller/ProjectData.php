@@ -22,6 +22,7 @@ class ProjectData extends AbstractController
         $results = [];
         $contributions = [];
         $resultContributions = $data->getContributions();
+        $tehcnologies = $data->getTechnologies();
         foreach($resultContributions as $contribution) {
             $contributions[] = [
                 "technology" => $contribution->getTechnology(),
@@ -31,6 +32,7 @@ class ProjectData extends AbstractController
         $results[] = [
             "project" => $data,
             "contributions" => $contributions,
+            "technologies" => $tehcnologies,
         ];       
         return $results;
     }

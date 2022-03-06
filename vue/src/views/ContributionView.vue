@@ -85,11 +85,29 @@ export default {
       })
     },
     newContribution() {
+      let data = []
+      let technology = settings.PATH_TECHNOLOGIES + this.selectedTechnology
       let params = {
         "project": settings.PATH_PROJECTS + this.selectedProject,
         "membre": settings.PATH_MEMBERS + this.selectedMember,
         "technology": settings.PATH_TECHNOLOGIES + this.selectedTechnology
       }
+      serverFileVue.getProject(this.selectedProject).then((response) =>{
+        let technologies = response.technologies
+        technologies.map((technology) => {
+          technology = technology.substring(1)
+          data.push(technology)
+        })
+        if (!technologies.includes(technology)){
+          
+          data.push(settings.PATH_TECHNOLOGIES + this.selectedTechnology)
+          let paramTechnologie ={'technologies': data}
+          console.log(paramTechnologie)
+          serverFileVue.modifyProject(this.selectedProject, paramTechnologie).then(() => {
+
+          })  
+        }
+      })
       serverFileVue.newContributions(params).then((response) => {
         if (response) {
           this.getAllContributions()

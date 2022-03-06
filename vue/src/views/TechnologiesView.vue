@@ -15,7 +15,9 @@
       <button @click="newTechnologies">Envoyers</button>
     </div>
     <div class="technologies" v-for="technology in technologies" :key="technology.id">
-      <a href="">{{ technology.name }}</a>
+      <router-link :to="{ name: 'Technology', params: {name: technology.name, id:technology.id }}">
+        {{ technology.name }}
+      </router-link>
     </div>
   </div>
 </template>

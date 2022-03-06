@@ -27,9 +27,10 @@
       <button @click="newMember">Envoyer le formulaire</button>
     </div>
     <div class="members" v-for="member in members" :key="member.id">
-      <a href="#">{{member.firstname}} - {{ member.lastname }} {{member.email}}</a>
+      <router-link :to="{ name: 'Member', params: { name: member.lastname, id: member.id }}">
+         {{member.firstname}} - {{ member.lastname }} {{member.email}}
+      </router-link>
     </div>
-
   </div>
 </template>
 

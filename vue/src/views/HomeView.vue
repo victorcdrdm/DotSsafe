@@ -21,22 +21,31 @@
       <button @click="addProject">Envoyer le formulaire</button>
     </div>
 
-    <button @click="showFilters = !showFilters">Plus de filtre</button>
+    <button @click="toggleshow">
+      {{ messagetoggle }} les filtres</button>
     <div class="filter" v-show="showFilters">
-      <select v-model="filtreTechnology">
-        <option disable value="">Choisiez une technologie</option>
-        <option v-for="technology in technologies" :key="technology.id" :value="technology.id">
-          {{technology.name}}
-        </option>
-      </select>
-      <button @click="activeFilters">Ajouter des filtre</button>
+        <select v-model="filterTechnology">
+          <option disable value="">Choisiez une technologie</option>
+          <option v-for="technology in technologies" :key="technology.id" :value="technology">
+            {{technology.name}}
+          </option>
+        </select>
+        <select v-model="filterMember">
+          <option disable value="">Choisiez un membre</option>
+          <option v-for="member in members" :key="member.id" :value="member">
+            {{member.firstname}} {{member.lastname}}
+          </option>
+        </select>
+        <button @click="activeFilters">Ajouter des filtre</button>
     </div>
 
     <div class="projects" v-for="project in projects" :key="project.id" v-show="showProject">
-      <a href=""> {{project.project.name}} </a>
+      <router-link :to="{ name: 'Project', params: {name: project.name, id: project.id }}">
+           {{project.name}}
+      </router-link>
     </div>
-    <div class="filterdProject" v-for="project in projectsFilterd" :key="project.id">
-        {{project.project.name}}
+    <div class="filterdProject" v-for="project in projectsFilterd" :key="project.name" v-show="showFilters">
+        {{project.name}}
     </div>
   </div>
 </template>
@@ -65,7 +74,6 @@ export default {
       technologies: [],
       addTechnologies: [],
       error: '',
-      findBYTechnology: null,
       options: {
           multi: true,
           groups: true,
@@ -77,20 +85,16 @@ export default {
       showProject: true,
       showFilters: false,
       showProjectFilterd: false,
-      filtreTechnology: "",
-      projectsFilterd: []
-    }
+      filterTechnology: "",
+      filterMember: "",
+      projectsFilterd: [],
+      messagetoggle: 'Afficher',   
+    } 
   },
   methods: {
     getProjects() {
       serverFile.getAllProjects().then((response) => {
-        let results = response['hydra:member']
-        results.map((result) => {
-          serverFile.getDataProject(result.id).then((response) => {
-              let project = response['hydra:member'][0]
-              this.projects.push(project)
-          }) 
-        })
+        this.projects = response['hydra:member']
       })
     },
     addProject() {
@@ -110,6 +114,7 @@ export default {
           this.name = ""
           this.technologies = ""
           this.slug = ""
+          this.addTechnologies = []
         }
       }).catch((err) => {
         if (err) {
@@ -120,33 +125,75 @@ export default {
     getTechnologies() {
       serverFile.getAllTechnologies().then((response) => {
         this.technologies = response['hydra:member']
-        this.technologies.map((result) => {
-          let technologie = {
-            id: result.id,
-            name: result.name
-          }
-        this.data[0].list.push(technologie)  
-        })
+        this.data[0].list = this.technologies
       })
     },
     activeFilters() {
       this.showProject = false
       this.showProjectFilterd = true
-      let technoFiltre = '/api/technologies/' + this.filtreTechnology +''
-      let projects = this.projects
-      console.log(projects[0].contributions)
-      this.projectsFilterd = []
-      projects.map((data) => {
-        if ( data.project.technologies[0] === technoFiltre ) {
-            this.projectsFilterd.push(data)
-        }
-      })
+      this.projectsFilterd = []     
+      if (this.filterTechnology) {
+        this.projectsFilterd = this.findBYTechnology()
+      }
+      if (this.filterMember) { 
+        this.projectsFilterd = this.findyByMembers()
+      }
     },
     getMembers() {
       serverFile.getAllMembers().then((response) => {
           this.members = response['hydra:member']
-          console.log(this.members)
       })
+    },
+    findBYTechnology() {
+      let projects = []
+      this.filterTechnology.projects.map((project) => {
+        let id = project.replace(/[^\d]/g, "")
+        serverFile.getProject(id).then((response) => {
+          projects.push(response)
+        })
+      })
+      return projects
+    },
+    findyByMembers () {
+      let projects = []
+      let idcheck = []
+      this.filterMember.contributions.map((contribution) => {
+        let id = contribution.replace(/[^\d]/g, "")
+        serverFile.getDataContribution(id).then((response) => {
+          let result = response['hydra:member'][0]
+          if(this.filterTechnology) {
+            if(this.filterTechnology.id === result.technology.id) {
+              if (idcheck.length <= 0) {
+              projects.push(result.project)
+              idcheck.push(result.project.id)
+            }
+            if(idcheck.indexOf(result.project.id) < 0 ) {
+              projects.push(result.project)
+              idcheck.push(result.project.id)
+              }
+            }
+          } else {
+            if (idcheck.length <= 0) {
+              projects.push(result.project)
+              idcheck.push(result.project.id)
+            }
+            if(idcheck.indexOf(result.project.id) < 0 ) {
+              projects.push(result.project)
+              idcheck.push(result.project.id)
+            }
+          }
+        })
+      })
+      return projects
+    },
+    toggleshow (){
+      this.showFilters = !this.showFilters
+      this.showProject = !this.showProject
+      if( this.showProject === true) {
+        this.messagetoggle = 'Afficher'
+      } else {
+        this.messagetoggle = 'Masquer'
+      }
     }
   },
  
@@ -155,6 +202,7 @@ export default {
     this.getTechnologies()
     this.getMembers()
   },
+  
 }
 </script>
 

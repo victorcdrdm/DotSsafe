@@ -26,16 +26,7 @@ class ContributionData extends AbstractController
             "technology" => $data->getTechnology(),
             "project" => $data->getProject(),
         ]; 
-        /* $contributions = $this->em->getRepository(Contribution::class)->findall();
-        foreach($contributions as $contribution) {
-            $results[] = [
-                "contribution" => $contribution,
-                "membre" => $contribution->getMembre(),
-                "technology" => $contribution->getTechnology(),
-                "projet" => $contribution->getProject(),
-            ];
-        } */
-       
+               
         return $results;
     }
 }

@@ -66,6 +66,10 @@ function getDataContribution(id) {
     return http.get('api/contributions/'+id+'/data')
 }
 
+function getContribution(id) {
+    return http.get('api/contributions/'+ id)
+}
+
 export default {
    name: 'serverFile',
    getAllProjects,
@@ -84,5 +88,6 @@ export default {
    updateTechnology,
    getMember,
    updateProfile,
+   getContribution,
 }
 </script>

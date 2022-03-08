@@ -71,11 +71,22 @@ export default {
     } 
   },
   methods: {
-    getDataProject(id) {
-      serverFile.getDataProject(id).then((response) => {
-        this.technologies = response['hydra:member'][0].technologies
-        this.contributions = response['hydra:member'][0].contributions
-        this.values = this.technologies
+    getDataProject() {
+      serverFile.getProject(this.id).then((response) => {   
+        let datas = response
+        datas.contributions.map((data) => {
+          let id = data.replace(/[^\d]/g, "")
+          serverFile.getDataContribution(id).then((response) =>{
+            response = response['hydra:member'][0]
+            this.contributions.push(response)
+          })
+        })
+        datas.technologies.map((technologie) => {
+          let id = technologie.replace(/[^\d]/g, "")
+          serverFile.getTechnology(id).then((response)=> {
+            this.technologies.push(response)
+          })
+        })
       })
     },
     getTechnologies() {
@@ -111,7 +122,7 @@ export default {
   },
   mounted: function() {
     this.getTechnologies()
-    this.getDataProject(this.id)
+    this.getDataProject()
   }
 }
 </script>

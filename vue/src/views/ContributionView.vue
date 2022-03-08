@@ -103,7 +103,6 @@ export default {
           
           data.push(settings.PATH_TECHNOLOGIES + this.selectedTechnology)
           let paramTechnologie ={'technologies': data}
-          console.log(paramTechnologie)
           serverFileVue.modifyProject(this.selectedProject, paramTechnologie).then(() => {
 
           })  

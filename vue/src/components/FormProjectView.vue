@@ -66,11 +66,10 @@ export default {
         "slug": this.slugName
       }
       serverFile.addProject(params).then((response) => {
-        console.log(response)
+  
       }).catch((err) => {
         let error = "Un errreur est survenu veuillez verifier les information rensigner"
-        console.log(error)
-        console.log(err)
+       
       })
     },
     alredyExist(slug) {

@@ -10,7 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource(itemOperations={
+ * @ApiResource(
+ *      itemOperations={
  *          "put",
  *          "get",
  *          "get_data_project"={

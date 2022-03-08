@@ -46,7 +46,6 @@ export default ({
       let params = { 'name': this.name }
       serverFile.updateTechnology(this.id, params).then((response) => {
         if(response) {
-          console.log(response)
           this.getDataTechnology()
           this.name = params.name
         }
